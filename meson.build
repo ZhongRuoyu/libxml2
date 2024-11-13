@@ -374,12 +374,15 @@ endif
 
 # icu
 if want_icu
-    icu_dep = dependency('icu-i18n', method: 'pkg-config')
-    defs = icu_dep.get_variable(pkgconfig: 'DEFS')
-    if cc.has_argument(defs)
-        libxml2_cflags += defs
-    endif
-    xml_deps += icu_dep
+    icu_deps = ['icu-i18n', 'icu-uc']
+    foreach dep_name : icu_deps
+        icu_dep = dependency(dep_name, method: 'pkg-config')
+        defs = icu_dep.get_variable(pkgconfig: 'DEFS')
+        if cc.has_argument(defs)
+            libxml2_cflags += defs
+        endif
+        xml_deps += icu_dep
+    endforeach
 endif
 
 ### iconv
